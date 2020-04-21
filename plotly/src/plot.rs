@@ -447,6 +447,10 @@ impl Plot {
             .output()
             .expect(DEFAULT_HTML_APP_NOT_FOUND);
     }
+
+    pub fn inner(&self) -> (&[Box<dyn Trace>], Option<&Layout>) {
+        (&self.traces, self.layout.as_ref())
+    }
 }
 
 #[cfg(test)]
