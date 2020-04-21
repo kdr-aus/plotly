@@ -2,6 +2,7 @@
 //!
 //! A plotting library for Rust powered by [Plotly.js](https://plot.ly/javascript/).
 
+#![allow(clippy::all)]
 #![allow(dead_code)]
 extern crate askama;
 extern crate rand;
