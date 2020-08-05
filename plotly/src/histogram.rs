@@ -8,10 +8,9 @@ use crate::private;
 use crate::private::copy_iterable_to_vec;
 
 #[cfg(feature = "plotly_ndarray")]
-use ndarray::{Array, Ix1, Ix2};
-#[cfg(feature = "plotly_ndarray")]
 use crate::ndarray::ArrayTraces;
-
+#[cfg(feature = "plotly_ndarray")]
+use ndarray::{Array, Ix1, Ix2};
 
 #[derive(Serialize, Clone, Debug)]
 pub struct Bins {
@@ -108,10 +107,7 @@ impl Cumulative {
 }
 
 #[derive(Serialize, Clone, Debug)]
-pub struct Histogram<H>
-where
-    H: Serialize + Clone + Default + 'static,
-{
+pub struct Histogram<H> {
     r#type: PlotType,
     #[serde(skip_serializing_if = "Option::is_none")]
     name: Option<String>,
@@ -178,10 +174,7 @@ where
     y_calendar: Option<Calendar>,
 }
 
-impl<H> Default for Histogram<H>
-where
-    H: Serialize + Clone + Default + 'static,
-{
+impl<H> Default for Histogram<H> {
     fn default() -> Self {
         Histogram {
             r#type: PlotType::Histogram,
@@ -221,15 +214,8 @@ where
     }
 }
 
-impl<H> Histogram<H>
-where
-    H: Serialize + Clone + Default + 'static,
-{
-    pub fn new<I>(x: I) -> Box<Self>
-    where
-        I: IntoIterator<Item = H>,
-    {
-        let x = copy_iterable_to_vec(x);
+impl<H> Histogram<H> {
+    pub fn new(x: Vec<H>) -> Box<Self> {
         Box::new(Histogram {
             r#type: PlotType::Histogram,
             x: Some(x),
@@ -237,12 +223,7 @@ where
         })
     }
 
-    pub fn new_xy<I>(x: I, y: I) -> Box<Self>
-    where
-        I: IntoIterator<Item = H>,
-    {
-        let x = copy_iterable_to_vec(x);
-        let y = copy_iterable_to_vec(y);
+    pub fn new_xy(x: Vec<H>, y: Vec<H>) -> Box<Self> {
         Box::new(Histogram {
             r#type: PlotType::Histogram,
             x: Some(x),
@@ -251,10 +232,7 @@ where
         })
     }
 
-    pub fn new_vertical<I>(y: I) -> Box<Self>
-    where
-        I: IntoIterator<Item = H>,
-    {
+    pub fn new_vertical(y: Vec<H>) -> Box<Self> {
         let y = copy_iterable_to_vec(y);
         Box::new(Histogram {
             r#type: PlotType::Histogram,
@@ -344,178 +322,178 @@ where
         })
     }
 
-    pub fn name(mut self, name: &str) -> Box<Self> {
+    pub fn name(&mut self, name: &str) -> &mut Self {
         self.name = Some(name.to_owned());
-        Box::new(self)
+        self
     }
 
-    pub fn visible(mut self, visible: bool) -> Box<Self> {
+    pub fn visible(&mut self, visible: bool) -> &mut Self {
         self.visible = Some(visible);
-        Box::new(self)
+        self
     }
 
-    pub fn show_legend(mut self, show_legend: bool) -> Box<Self> {
+    pub fn show_legend(&mut self, show_legend: bool) -> &mut Self {
         self.show_legend = Some(show_legend);
-        Box::new(self)
+        self
     }
 
-    pub fn legend_group(mut self, legend_group: &str) -> Box<Self> {
+    pub fn legend_group(&mut self, legend_group: &str) -> &mut Self {
         self.legend_group = Some(legend_group.to_owned());
-        Box::new(self)
+        self
     }
 
-    pub fn opacity(mut self, opacity: f64) -> Box<Self> {
+    pub fn opacity(&mut self, opacity: f64) -> &mut Self {
         self.opacity = Some(opacity);
-        Box::new(self)
+        self
     }
 
-    pub fn text(mut self, text: &str) -> Box<Self> {
+    pub fn text(&mut self, text: &str) -> &mut Self {
         self.text = Some(Dim::Scalar(text.to_owned()));
-        Box::new(self)
+        self
     }
 
-    pub fn text_array<S: AsRef<str>>(mut self, text: Vec<S>) -> Box<Self> {
+    pub fn text_array<S: AsRef<str>>(&mut self, text: Vec<S>) -> &mut Self {
         let text = private::owned_string_vector(text);
         self.text = Some(Dim::Vector(text));
-        Box::new(self)
+        self
     }
 
-    pub fn hover_text(mut self, hover_text: &str) -> Box<Self> {
+    pub fn hover_text(&mut self, hover_text: &str) -> &mut Self {
         self.hover_text = Some(Dim::Scalar(hover_text.to_owned()));
-        Box::new(self)
+        self
     }
 
-    pub fn hover_text_array<S: AsRef<str>>(mut self, hover_text: Vec<S>) -> Box<Self> {
+    pub fn hover_text_array<S: AsRef<str>>(&mut self, hover_text: Vec<S>) -> &mut Self {
         let hover_text = private::owned_string_vector(hover_text);
         self.hover_text = Some(Dim::Vector(hover_text));
-        Box::new(self)
+        self
     }
 
-    pub fn hover_info(mut self, hover_info: HoverInfo) -> Box<Self> {
+    pub fn hover_info(&mut self, hover_info: HoverInfo) -> &mut Self {
         self.hover_info = Some(hover_info);
-        Box::new(self)
+        self
     }
 
-    pub fn hover_template(mut self, hover_template: &str) -> Box<Self> {
+    pub fn hover_template(&mut self, hover_template: &str) -> &mut Self {
         self.hover_template = Some(Dim::Scalar(hover_template.to_owned()));
-        Box::new(self)
+        self
     }
 
-    pub fn x_axis(mut self, axis: &str) -> Box<Self> {
+    pub fn x_axis(&mut self, axis: &str) -> &mut Self {
         self.x_axis = Some(axis.to_owned());
-        Box::new(self)
+        self
     }
 
-    pub fn y_axis(mut self, axis: &str) -> Box<Self> {
+    pub fn y_axis(&mut self, axis: &str) -> &mut Self {
         self.y_axis = Some(axis.to_owned());
-        Box::new(self)
+        self
     }
 
-    pub fn hover_template_array<S: AsRef<str>>(mut self, hover_template: Vec<S>) -> Box<Self> {
+    pub fn hover_template_array<S: AsRef<str>>(&mut self, hover_template: Vec<S>) -> &mut Self {
         let hover_template = private::owned_string_vector(hover_template);
         self.hover_template = Some(Dim::Vector(hover_template));
-        Box::new(self)
+        self
     }
 
-    pub fn orientation(mut self, orientation: Orientation) -> Box<Self> {
+    pub fn orientation(&mut self, orientation: Orientation) -> &mut Self {
         self.orientation = Some(orientation);
-        Box::new(self)
+        self
     }
 
-    pub fn hist_func(mut self, hist_func: HistFunc) -> Box<Self> {
+    pub fn hist_func(&mut self, hist_func: HistFunc) -> &mut Self {
         self.hist_func = Some(hist_func);
-        Box::new(self)
+        self
     }
 
-    pub fn hist_norm(mut self, hist_norm: HistNorm) -> Box<Self> {
+    pub fn hist_norm(&mut self, hist_norm: HistNorm) -> &mut Self {
         self.hist_norm = Some(hist_norm);
-        Box::new(self)
+        self
     }
 
-    pub fn alignment_group(mut self, alignment_group: &str) -> Box<Self> {
+    pub fn alignment_group(&mut self, alignment_group: &str) -> &mut Self {
         self.alignment_group = Some(alignment_group.to_owned());
-        Box::new(self)
+        self
     }
 
-    pub fn offset_group(mut self, offset_group: &str) -> Box<Self> {
+    pub fn offset_group(&mut self, offset_group: &str) -> &mut Self {
         self.offset_group = Some(offset_group.to_owned());
-        Box::new(self)
+        self
     }
 
-    pub fn n_bins_x(mut self, n_bins_x: usize) -> Box<Self> {
+    pub fn n_bins_x(&mut self, n_bins_x: usize) -> &mut Self {
         self.n_bins_x = Some(n_bins_x);
-        Box::new(self)
+        self
     }
 
-    pub fn n_bins_y(mut self, n_bins_y: usize) -> Box<Self> {
+    pub fn n_bins_y(&mut self, n_bins_y: usize) -> &mut Self {
         self.n_bins_y = Some(n_bins_y);
-        Box::new(self)
+        self
     }
 
-    pub fn auto_bin_x(mut self, auto_bin_x: bool) -> Box<Self> {
+    pub fn auto_bin_x(&mut self, auto_bin_x: bool) -> &mut Self {
         self.auto_bin_x = Some(auto_bin_x);
-        Box::new(self)
+        self
     }
 
-    pub fn auto_bin_y(mut self, auto_bin_y: bool) -> Box<Self> {
+    pub fn auto_bin_y(&mut self, auto_bin_y: bool) -> &mut Self {
         self.auto_bin_y = Some(auto_bin_y);
-        Box::new(self)
+        self
     }
 
-    pub fn bin_group(mut self, bin_group: &str) -> Box<Self> {
+    pub fn bin_group(&mut self, bin_group: &str) -> &mut Self {
         self.bin_group = Some(bin_group.to_owned());
-        Box::new(self)
+        self
     }
 
-    pub fn x_bins(mut self, x_bins: Bins) -> Box<Self> {
+    pub fn x_bins(&mut self, x_bins: Bins) -> &mut Self {
         self.x_bins = Some(x_bins);
-        Box::new(self)
+        self
     }
 
-    pub fn y_bins(mut self, y_bins: Bins) -> Box<Self> {
+    pub fn y_bins(&mut self, y_bins: Bins) -> &mut Self {
         self.y_bins = Some(y_bins);
-        Box::new(self)
+        self
     }
 
-    pub fn marker(mut self, marker: Marker) -> Box<Self> {
+    pub fn marker(&mut self, marker: Marker) -> &mut Self {
         self.marker = Some(marker);
-        Box::new(self)
+        self
     }
 
-    pub fn error_x(mut self, error_x: ErrorData) -> Box<Self> {
+    pub fn error_x(&mut self, error_x: ErrorData) -> &mut Self {
         self.error_x = Some(error_x);
-        Box::new(self)
+        self
     }
 
-    pub fn error_y(mut self, error_y: ErrorData) -> Box<Self> {
+    pub fn error_y(&mut self, error_y: ErrorData) -> &mut Self {
         self.error_y = Some(error_y);
-        Box::new(self)
+        self
     }
 
-    pub fn cumulative(mut self, cumulative: Cumulative) -> Box<Self> {
+    pub fn cumulative(&mut self, cumulative: Cumulative) -> &mut Self {
         self.cumulative = Some(cumulative);
-        Box::new(self)
+        self
     }
 
-    pub fn hover_label(mut self, hover_label: Label) -> Box<Self> {
+    pub fn hover_label(&mut self, hover_label: Label) -> &mut Self {
         self.hover_label = Some(hover_label);
-        Box::new(self)
+        self
     }
 
-    pub fn x_calendar(mut self, x_calendar: Calendar) -> Box<Self> {
+    pub fn x_calendar(&mut self, x_calendar: Calendar) -> &mut Self {
         self.x_calendar = Some(x_calendar);
-        Box::new(self)
+        self
     }
 
-    pub fn y_calendar(mut self, y_calendar: Calendar) -> Box<Self> {
+    pub fn y_calendar(&mut self, y_calendar: Calendar) -> &mut Self {
         self.y_calendar = Some(y_calendar);
-        Box::new(self)
+        self
     }
 }
 
 impl<H> Trace for Histogram<H>
 where
-    H: Serialize + Clone + Default + 'static,
+    H: Serialize,
 {
     fn serialize(&self) -> String {
         serde_json::to_string(&self).unwrap()
