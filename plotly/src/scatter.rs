@@ -15,7 +15,7 @@ use crate::private::{to_num_or_string_wrapper, NumOrString, NumOrStringWrapper, 
 #[cfg(feature = "plotly_ndarray")]
 use ndarray::{Array, Ix1, Ix2};
 
-#[derive(Serialize, Debug, Default)]
+#[derive(Serialize, Debug)]
 pub struct Scatter<X, Y> {
     r#type: PlotType,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -104,6 +104,55 @@ pub struct Scatter<X, Y> {
     x_calendar: Option<Calendar>,
     #[serde(skip_serializing_if = "Option::is_none", rename = "ycalendar")]
     y_calendar: Option<Calendar>,
+}
+
+impl<X, Y> Default for Scatter<X, Y>
+{
+    fn default() -> Self {
+        Scatter {
+            r#type: PlotType::Scatter,
+            name: None,
+            visible: None,
+            show_legend: None,
+            legend_group: None,
+            opacity: None,
+            mode: None,
+            ids: None,
+            x: None,
+            x0: None,
+            dx: None,
+            y: None,
+            y0: None,
+            dy: None,
+            text: None,
+            text_position: None,
+            text_template: None,
+            hover_text: None,
+            hover_info: None,
+            hover_template: None,
+            meta: None,
+            custom_data: None,
+            x_axis: None,
+            y_axis: None,
+            orientation: None,
+            group_norm: None,
+            stack_group: None,
+            marker: None,
+            line: None,
+            text_font: None,
+            error_x: None,
+            error_y: None,
+            clip_on_axis: None,
+            connect_gaps: None,
+            fill: None,
+            fill_color: None,
+            hover_label: None,
+            hover_on: None,
+            stack_gaps: None,
+            x_calendar: None,
+            y_calendar: None,
+        }
+    }
 }
 
 impl<X, Y> Scatter<X, Y> {
