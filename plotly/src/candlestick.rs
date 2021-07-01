@@ -8,9 +8,6 @@ use serde::Serialize;
 
 #[derive(Serialize, Debug, Default)]
 pub struct Candlestick<T, O>
-where
-    T: Serialize + Default,
-    O: Serialize + Default,
 {
     r#type: PlotType,
     x: Vec<T>,
@@ -53,9 +50,6 @@ where
 }
 
 impl<T, O> Candlestick<T, O>
-where
-    T: Serialize + Default,
-    O: Serialize + Default,
 {
     pub fn new(
         x: Vec<T>,
@@ -63,7 +57,11 @@ where
         high: Vec<O>,
         low: Vec<O>,
         close: Vec<O>,
-    ) -> Box<Candlestick<T, O>> {
+    ) -> Box<Self> 
+    where
+        T: Serialize + Default,
+        O: Serialize + Default,
+    {
         let iline = Line::new().width(1.0).color(NamedColor::Green);
         let dline = Line::new().width(1.0).color(NamedColor::Red);
         Box::new(Candlestick {
@@ -79,103 +77,103 @@ where
         })
     }
 
-    pub fn name(mut self, name: &str) -> Box<Candlestick<T, O>> {
+    pub fn name(&mut self, name: &str) -> &mut Self {
         self.name = Some(name.to_owned());
-        Box::new(self)
+        self
     }
 
-    pub fn visible(mut self, visible: bool) -> Box<Candlestick<T, O>> {
+    pub fn visible(&mut self, visible: bool) -> &mut Self {
         self.visible = Some(visible);
-        Box::new(self)
+        self
     }
 
-    pub fn show_legend(mut self, show_legend: bool) -> Box<Candlestick<T, O>> {
+    pub fn show_legend(&mut self, show_legend: bool) -> &mut Self {
         self.show_legend = Some(show_legend);
-        Box::new(self)
+        self
     }
 
-    pub fn legend_group(mut self, legend_group: &str) -> Box<Candlestick<T, O>> {
+    pub fn legend_group(&mut self, legend_group: &str) -> &mut Self {
         self.legend_group = Some(legend_group.to_owned());
-        Box::new(self)
+        self
     }
 
-    pub fn opacity(mut self, opacity: f64) -> Box<Candlestick<T, O>> {
+    pub fn opacity(&mut self, opacity: f64) -> &mut Self {
         self.opacity = Some(opacity);
-        Box::new(self)
+        self
     }
 
-    pub fn text(mut self, text: &str) -> Box<Candlestick<T, O>> {
+    pub fn text(&mut self, text: &str) -> &mut Self {
         self.text = Some(Dim::Scalar(text.to_owned()));
-        Box::new(self)
+        self
     }
 
-    pub fn text_array<S: AsRef<str>>(mut self, text: Vec<S>) -> Box<Candlestick<T, O>> {
+    pub fn text_array<S: AsRef<str>>(&mut self, text: Vec<S>) -> &mut Self {
         let text = private::owned_string_vector(text);
         self.text = Some(Dim::Vector(text));
-        Box::new(self)
+        self
     }
 
-    pub fn hover_text(mut self, hover_text: &str) -> Box<Candlestick<T, O>> {
+    pub fn hover_text(&mut self, hover_text: &str) -> &mut Self {
         self.hover_text = Some(Dim::Scalar(hover_text.to_owned()));
-        Box::new(self)
+        self
     }
 
-    pub fn hover_text_array<S: AsRef<str>>(mut self, hover_text: Vec<S>) -> Box<Candlestick<T, O>> {
+    pub fn hover_text_array<S: AsRef<str>>(&mut self, hover_text: Vec<S>) -> &mut Self {
         let hover_text = private::owned_string_vector(hover_text);
         self.hover_text = Some(Dim::Vector(hover_text));
-        Box::new(self)
+        self
     }
 
-    pub fn hover_info(mut self, hover_info: HoverInfo) -> Box<Candlestick<T, O>> {
+    pub fn hover_info(&mut self, hover_info: HoverInfo) -> &mut Self {
         self.hover_info = Some(hover_info);
-        Box::new(self)
+        self
     }
 
-    pub fn x_axis(mut self, axis: &str) -> Box<Candlestick<T, O>> {
+    pub fn x_axis(&mut self, axis: &str) -> &mut Self {
         self.x_axis = Some(axis.to_owned());
-        Box::new(self)
+        self
     }
 
-    pub fn y_axis(mut self, axis: &str) -> Box<Candlestick<T, O>> {
+    pub fn y_axis(&mut self, axis: &str) -> &mut Self {
         self.y_axis = Some(axis.to_owned());
-        Box::new(self)
+        self
     }
 
-    pub fn line(mut self, line: Line) -> Box<Candlestick<T, O>> {
+    pub fn line(&mut self, line: Line) -> &mut Self {
         self.line = Some(line);
-        Box::new(self)
+        self
     }
 
-    pub fn whisker_width(mut self, whisker_width: f64) -> Box<Candlestick<T, O>> {
+    pub fn whisker_width(&mut self, whisker_width: f64) -> &mut Self {
         self.whisker_width = Some(whisker_width);
-        Box::new(self)
+        self
     }
 
-    pub fn increasing(mut self, increasing: Direction) -> Box<Candlestick<T, O>> {
+    pub fn increasing(&mut self, increasing: Direction) -> &mut Self {
         self.increasing = Some(increasing);
-        Box::new(self)
+        self
     }
 
-    pub fn decreasing(mut self, decreasing: Direction) -> Box<Candlestick<T, O>> {
+    pub fn decreasing(&mut self, decreasing: Direction) -> &mut Self {
         self.decreasing = Some(decreasing);
-        Box::new(self)
+        self
     }
 
-    pub fn hover_label(mut self, hover_label: Label) -> Box<Candlestick<T, O>> {
+    pub fn hover_label(&mut self, hover_label: Label) -> &mut Self {
         self.hover_label = Some(hover_label);
-        Box::new(self)
+        self
     }
 
-    pub fn x_calendar(mut self, x_calendar: Calendar) -> Box<Candlestick<T, O>> {
+    pub fn x_calendar(&mut self, x_calendar: Calendar) -> &mut Self {
         self.x_calendar = Some(x_calendar);
-        Box::new(self)
+        self
     }
 }
 
 impl<X, Y> Trace for Candlestick<X, Y>
 where
-    X: Serialize + Default,
-    Y: Serialize + Default,
+    X: Serialize,
+    Y: Serialize,
 {
     fn serialize(&self) -> String {
         serde_json::to_string(&self).unwrap()
